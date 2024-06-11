@@ -1,0 +1,52 @@
+/*
+1.資料有排序過
+2.不製作額外的陣列
+3.需要用到交換、逼近...操作時
+*/
+
+
+
+/*1.反向指標
+  (1)將指標設在兩端 ex: left、right
+  (2)根據需要決定將left往右移或是right往左移，直到目標達成
+  ex: two sum (sorted)
+*/
+  int example(int[] nums, int target){
+    int left = 0, right = nums.length-1;
+    while(right > left){
+      if(nums[left] + nums[right] > target){
+        right--;
+      }
+      if(nums[left] + nums[right] < target){
+        left++;
+      }
+      if(nums[left] + nums[right] == target){
+        return nums[left] + nums[right];
+      }
+    }
+    return 0;
+  }
+
+/*2.同向指標
+  (1)設定兩個指標(同向移動)
+  (2)一個指標用來遍歷，另一個滿足條件時移動
+  ex: push 0 to end
+*/
+  int[] example(int[] nums){
+    int p1 = nums.length, p2 = p1;  //p2遍歷
+    int temp;
+    //將0往後交換位置
+    while(p2 > 0){
+      if(nums[p2] == 0){
+        temp = nums[p1];
+        nums[p1] = 0;
+        nums[p2] = temp;
+        p2--;
+        p1--;
+      }
+      else{
+        p2--;
+      }
+    }
+    return nums;
+  }
