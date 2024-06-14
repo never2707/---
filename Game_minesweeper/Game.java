@@ -6,61 +6,86 @@ import java.util.TimerTask;
 import java.util.Arrays;
 import java.util.Vector;
 
-class Game extends JFrame implements MouseListener{
-	private int width=400,height=450,mapRow=9,mapCol=9; //width:視窗寬、height:視窗長、mapRow:地圖row、mapCol:地圖col。
-	private JButton button[][]=new JButton[width][height]; //按鈕。
-	private int bombCount=10; //固定10個炸彈。
-	private JLabel bombnumber=new JLabel("目前炸彈數："+bombCount);
+class Game extends JFrame implements java.awt.event.MouseListener{
 
-	private int map[][]=new int[mapRow][mapCol]; //地圖。
-	private boolean buttonIsPress[][]=new boolean[mapRow][mapCol]; //判斷按鈕是否按壓。
-	private int mapAroundBomb[][]=new int[mapRow][mapCol]; //周圍有多少炸彈。
-	private int direct[][]={{0,0},{0,1},{0,-1},{1,0},{-1,0},{1,1},{-1,-1},{-1,1},{1,-1}}; //8方位。
-	
-	private int timeCount=0; //時間計數。
+    private int mapRow, mapCol;  //格數
+    private int direct[][]={{0,0},{0,1},{0,-1},{1,0},{-1,0},{1,1},{-1,-1},{-1,1},{1,-1}}; //8方位。
+    private int timeCount=0; //時間計數。
 	private int timeContinue=1; //1:繼續、0:停止。
-	
-	Game(){
-		/*視窗。*/
-		setSize(width, height); //設定大小。
-		setResizable(false); //設定大小為不可調整。
-		setDefaultCloseOperation(EXIT_ON_CLOSE); //設定關閉按鈕的動作。
+
+    private int width, height;
+    private int bombCount;
+    private int[][] map;
+    private int[][] bombAround;
+    private boolean[][] buttonIsPress;
+    private JButton[][] button;
+    private JLabel bombRest;
+
+
+    Game(int width, int height, int row, int col, int bombCount){  //由使用者決定大小
+
+        this.width = width;
+        this.height = height;
+        this.mapRow = row;
+        this.mapCol = col;  
+        this.bombCount = bombCount;
+
+        button = new JButton[width][height];
+        bombRest = new JLabel("目前炸彈:" + bombCount);
+        map = new int[mapRow][mapCol]; //地圖。
+        buttonIsPress =new boolean[mapRow][mapCol]; //判斷按鈕是否按壓。
+        bombAround = new int[mapRow][mapCol]; //周圍有多少炸彈。
+
+        setWindow();
+        setTop();
+        setButtons();
+        setMap();
+        setAroundBomb();
+        setVisible(true);
+
+    }
+
+    //設置視窗  
+    public void setWindow(){
+        setSize(width, height); 
+		setResizable(false); //設定大小不可調整。
+		setDefaultCloseOperation(EXIT_ON_CLOSE); //設定關閉按鈕。
 		setTitle("Minesweeper"); //設定標題。
 		setLocationRelativeTo(this); //顯示為置中。
-		
-		/*TopBar。*/
-		JPanel topPanel=new JPanel();
-		
-		bombnumber.setText("目前炸彈數："+bombCount); //顯示目前標記多少炸彈。
-		topPanel.add(bombnumber);
-		
-		JButton restart=new JButton("新局"); //重新開始按鈕。
+    }
+
+    //top bar  //加圖片
+    public void setTop(){
+        //地雷數
+        JPanel topPanel = new JPanel();
+        bombRest.setText("目前炸彈:" + bombCount);
+        topPanel.add(bombRest);
+
+        JButton restart=new JButton("新局"); //重新開始按鈕。
 		restart.setActionCommand("r"); //設定指令。
 		restart.addMouseListener(this); //加入監聽。
 		topPanel.add(restart);
 
-		JLabel time=new JLabel("已經過時間：0"); //顯示時間。
+        JLabel time=new JLabel("已經過時間：0"); //顯示時間。
 		TimerTask timertask=new TimerTask(){
 			public void run(){
 				if(timeContinue==1)time.setText("已經過時間： "+(timeCount++));
 			}
 		};
-		new Timer().scheduleAtFixedRate(timertask,0,1000);
-		topPanel.add(time);
+        new Timer().scheduleAtFixedRate(timertask,0,1000);
+		topPanel.add(time); 
 		
 		add(topPanel,BorderLayout.NORTH);
+    }
 
-		/*地圖按鈕。*/
-		JPanel centerButtonPanel = new JPanel();
+    //設置按鈕  //加圖片
+    public void setButtons(){
+        JPanel centerButtonPanel = new JPanel();
         centerButtonPanel.setLayout(new GridLayout(mapRow,mapCol));
-		ImageIcon icon = new ImageIcon("c:/Users/user/Desktop/png-transparent-gray-spiked-ball-art-microsoft-minesweeper-minesweeper-classic-the-minesweeper-naval-mine-mines-game-symmetry-video-game-thumbnail.png");
 
         for(int i=0;i<mapRow;i++){
         	for(int j=0;j<mapCol;j++){
         		button[i][j]=new JButton();
-				Image image = icon.getImage().getScaledInstance(50, 50, Image.SCALE_DEFAULT);
-				icon = new ImageIcon(image);
-				button[i][j].setIcon(icon);
         		button[i][j].setBackground(Color.WHITE); //設定按鈕背景顏色。
         		button[i][j].setActionCommand(i+" "+j); //設定按鈕指令。
         		button[i][j].addMouseListener(this); //按鈕加入監聽。
@@ -68,19 +93,11 @@ class Game extends JFrame implements MouseListener{
         	}
         }
         add(centerButtonPanel,BorderLayout.CENTER);
-        
-        /*設定地圖、找出座標周圍有多少炸彈*/
-        setMap();
-        aroundBomb();
-        
-        setVisible(true);
-	}
-	
-	/**********************
-	 *設定地圖 :有炸彈:1、無炸彈:0*
-	 **********************/
-	private void setMap(){
-		int count=0;
+    }
+
+    //設置地圖 有炸彈1 無炸彈0
+    public void setMap(){
+        int count=0;
 		while(count!=10){
 			int x=(int)(Math.random()*9),y=(int)(Math.random()*9); //亂數設定炸彈座標。
 			if(map[x][y]==0){
@@ -88,35 +105,31 @@ class Game extends JFrame implements MouseListener{
 				count++;
 			}
 		}
-	}
-	
-	/******************
-	 *判斷座標周圍共有多少炸彈*
-	 ******************/
-	private void aroundBomb(){
-		for(int i=0;i<mapRow;i++){
+    }
+
+    //設置周圍炸彈數目
+    public void setAroundBomb(){
+        for(int i=0;i<mapRow;i++){
 			for(int j=0;j<mapCol;j++){
 				if(map[i][j]==1){
-					mapAroundBomb[i][j]=-1; //炸彈本身設定為-1。
+					bombAround[i][j]=-1; //炸彈本身設定為-1。
 				}else{
 					for(int k=0;k<direct.length;k++){
 						int row=i+direct[k][0],col=j+direct[k][1];
-						if((row>=0 && row<mapCol && col>=0 && col<mapCol) && map[row][col]==1) mapAroundBomb[i][j]++;
+						if((row>=0 && row<mapCol && col>=0 && col<mapCol) && map[row][col]==1) bombAround[i][j]++;
 					}
 				}
 			}
 		}
-	}
-	
-	/*******
-	 *重新開始*
-	 *******/
-	private void restart(){
+    }
+
+    //重新開始  //加圖片
+    private void restart(){
 		timeCount=1;
 		timeContinue=1;
-		for(int i=0;i<mapRow;i++) Arrays.fill(map[i],0); //initial map array
-		for(int i=0;i<mapRow;i++) Arrays.fill(buttonIsPress[i],false); //initial buttonIsPress
-		for(int i=0;i<mapRow;i++) Arrays.fill(mapAroundBomb[i],0); //initial mapAroundBomb
+		for(int i=0;i<mapRow;i++) Arrays.fill(map[i],0); 
+		for(int i=0;i<mapRow;i++) Arrays.fill(buttonIsPress[i],false); 
+		for(int i=0;i<mapRow;i++) Arrays.fill(bombAround[i],0); 
 		
 		for(int i=0;i<mapRow;i++){
         	for(int j=0;j<mapCol;j++){
@@ -125,23 +138,19 @@ class Game extends JFrame implements MouseListener{
         	}
         }
 		setMap();
-		aroundBomb();
+		setAroundBomb();
         bombCount=10;
-        bombnumber.setText("目前炸彈數："+bombCount);
+        bombRest.setText("目前炸彈數："+bombCount);
         
 	}
-	
-	/******************************************************
-	 *紀錄滑鼠事件：BUTTON1(滑鼠左鍵)、BUTTON2(滾輪)、BUTTON3(滑鼠右鍵)*
-	 ******************************************************/
+
+
+    //滑鼠事件  //未修改
 	@Override
 	public void mouseClicked(MouseEvent e){
 		String command[]=((JButton)e.getSource()).getActionCommand().split(" ");
-		if(command[0].equals("r")){
-			/*重新開始*/
-			
-			restart();
-		}else{
+		if(command[0].equals("r")) restart();//重新開始:r
+		else{
 			int row=Integer.parseInt(command[0]),col=Integer.parseInt(command[1]);
 			if(e.getButton()==MouseEvent.BUTTON1){
 				if(map[row][col]==1 && !buttonIsPress[row][col]){
@@ -153,7 +162,7 @@ class Game extends JFrame implements MouseListener{
 					JOptionPane.showMessageDialog(null, "你踩到地雷了"); //顯示失敗訊息。
 					restart(); //重新開始。
 				}else{
-					if(mapAroundBomb[row][col]==0 && !buttonIsPress[row][col]){
+					if(bombAround[row][col]==0 && !buttonIsPress[row][col]){
 						/*當按到周圍沒炸彈的按鈕則擴散，且按鈕沒按過。*/
 						
 						Vector<postion> vector=new Vector<postion>(); //紀錄需要擴散的點。
@@ -162,7 +171,7 @@ class Game extends JFrame implements MouseListener{
 						for(int i=0;i<vector.size();i++){
 							for(int j=0;j<direct.length;j++){
 								int tempRow=direct[j][0]+vector.get(i).getRow(),tempCol=direct[j][1]+vector.get(i).getCol();
-								if((tempRow>=0 && tempRow<mapRow) && (tempCol>=0 && tempCol<mapCol) && mapAroundBomb[tempRow][tempCol]==0){
+								if((tempRow>=0 && tempRow<mapRow) && (tempCol>=0 && tempCol<mapCol) && bombAround[tempRow][tempCol]==0){
 									boolean flag=false;
 									//檢查是否已經儲存此筆資料。
 									for(int k=0;k<vector.size();k++){
@@ -181,8 +190,8 @@ class Game extends JFrame implements MouseListener{
 								int tempRow=direct[j][0]+vector.get(i).getRow(),tempCol=direct[j][1]+vector.get(i).getCol();
 								if((tempRow>=0 && tempRow<mapRow) && (tempCol>=0 && tempCol<mapCol)){
 									//非0數字才印出來。
-									if(mapAroundBomb[tempRow][tempCol]!=0) 
-										button[tempRow][tempCol].setText(Integer.toString(mapAroundBomb[tempRow][tempCol]));
+									if(bombAround[tempRow][tempCol]!=0) 
+										button[tempRow][tempCol].setText(Integer.toString(bombAround[tempRow][tempCol]));
 									button[tempRow][tempCol].setBackground(Color.GRAY); //設定按鈕背景顏色。
 									buttonIsPress[tempRow][tempCol]=true; //設定按鈕為按過。
 								}
@@ -191,7 +200,7 @@ class Game extends JFrame implements MouseListener{
 					}else if(!buttonIsPress[row][col]){
 						/*不是炸彈、也不須擴散的點。*/
 						
-						button[row][col].setText(Integer.toString(mapAroundBomb[row][col])); //印出數字。
+						button[row][col].setText(Integer.toString(bombAround[row][col])); //印出數字。
 						button[row][col].setBackground(Color.GRAY); //設定按鈕背景顏色。
 						buttonIsPress[row][col]=true; //設定按鈕為按過。
 					}
@@ -202,14 +211,14 @@ class Game extends JFrame implements MouseListener{
 				buttonIsPress[row][col]=false; //取消按壓。
 				button[row][col].setBackground(Color.WHITE); //設定按鈕背景顏色。
 				bombCount++; //炸彈數。
-				bombnumber.setText("目前炸彈數："+bombCount); 
+				bombRest.setText("目前炸彈數："+bombCount); 
 			}else if(e.getButton()==MouseEvent.BUTTON3 && !buttonIsPress[row][col]){
 				/*標記炸彈。並判斷是否結束遊戲。*/
 				
 				((JButton)e.getSource()).setBackground(Color.GREEN); //設定按鈕背景顏色。
 				buttonIsPress[row][col]=true; //設定按鈕為按過。
 				bombCount--; //炸彈數。
-				bombnumber.setText("目前炸彈數："+bombCount);
+				bombRest.setText("目前炸彈數："+bombCount);
 				
 				//判斷是否結束遊戲。
 				if(bombCount==0){
@@ -229,23 +238,16 @@ class Game extends JFrame implements MouseListener{
 			}
 		}
 	}
-	@Override
-	public void mouseEntered(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseExited(MouseEvent e) {
-		// TODO Auto-generated method stub	
-	}
-	@Override
-	public void mousePressed(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
-	@Override
-	public void mouseReleased(MouseEvent e) {
-		// TODO Auto-generated method stub
-	}
+
+
+    @Override
+    public void mousePressed(java.awt.event.MouseEvent e) {}
+    public void mouseReleased(java.awt.event.MouseEvent e) {}
+    public void mouseEntered(java.awt.event.MouseEvent e) {}
+    public void mouseExited(java.awt.event.MouseEvent e) {}
+
 }
+
 class postion{
 	private int row,col;
 	postion(int row,int col){
@@ -259,8 +261,7 @@ class postion{
 		return col;
 	}
 }
+
 class minesweeper{
-	public static void main(String args[]){
-		Game g=new Game();
-	}
+    Game g = new Game(0, 0, 0, 0, 0);
 }
