@@ -25,7 +25,7 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 	private JLabel time;
 
 
-    public MineSweeper(int width, int height, int row, int col, int bombCount,int mode){  //由使用者決定大小
+    public MineSweeper(int width, int height, int row, int col, int bombCount,int mode){  //不同模式
 
 		this.mode = mode;
         this.width = width;
@@ -103,11 +103,24 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
         add(centerButtonPanel,BorderLayout.CENTER);
     }
 
-    //設置地圖 有炸彈1 無炸彈0
+    //設置炸彈 有炸彈1 無炸彈0
     public void setMap(){
         int count=0;
-		while(count!=10){
-			int x=(int)(Math.random()*9),y=(int)(Math.random()*9); //亂數設定炸彈座標。
+		while(count!=bombCount){
+			int x=0, y=0;
+			if(this.mode == 0){
+				x = (int)(Math.random()*9);
+				y = (int)(Math.random()*9); 
+			}
+			else if(this.mode == 1){
+				x = (int)(Math.random()*16);
+				y = (int)(Math.random()*16);
+			}
+			else if(this.mode == 2){
+				x = (int)(Math.random()*16);
+				y = (int)(Math.random()*25);
+			}
+
 			if(map[x][y]==0){
 				map[x][y]=1;
 				count++;
@@ -175,7 +188,7 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 		this.timeRecord = timeCount;
 	}
 
-    //滑鼠事件  //未修改
+    //滑鼠事件  //加圖片
 	@Override
 	public void mouseClicked(MouseEvent e){
 		String command[]=((JButton)e.getSource()).getActionCommand().split(" ");
@@ -307,4 +320,3 @@ class postion{
 		return col;
 	}
 }
-
