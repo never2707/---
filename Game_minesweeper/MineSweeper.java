@@ -219,8 +219,8 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 				//踩到空格
 				else if(bombAround[row][col]==0 && !buttonIsPress[row][col]){
 						
-					Vector<postion> vector=new Vector<postion>(); //紀錄需要擴散的點。
-					vector.add(new postion(row,col));
+					Vector<position> vector=new Vector<position>(); //紀錄需要擴散的點。
+					vector.add(new position(row,col));
 					//判斷點是否符合擴散的需求，直到vector的資料都處理完。
 					for(int i=0;i<vector.size();i++){
 						for(int j=0;j<direct.length;j++){
@@ -234,7 +234,7 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 										break;
 									}
 								}
-								if(!flag) vector.add(new postion(tempRow,tempCol)); //此擴散點不存在則儲存起來。
+								if(!flag) vector.add(new position(tempRow,tempCol)); //此擴散點不存在則儲存起來。
 							}
 						}
 					}
@@ -324,9 +324,9 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 
 }
 
-class postion{
+class position{
 	private int row,col;
-	postion(int row,int col){
+	position(int row,int col){
 		this.row=row;
 		this.col=col;
 	}
@@ -337,7 +337,6 @@ class postion{
 		return col;
 	}
 }
-
 
 
 
