@@ -160,9 +160,7 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
         		button[i][j].setText("");
         	}
         }
-		setMap();
-		setAroundBomb();
-        switch (mode) {
+		switch (mode) {
 			case 0:
 				bombCount = 10;
 				break;
@@ -175,6 +173,9 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 			default:
 				break;
 		}
+		setMap();
+		setAroundBomb();
+
         bombRest.setText("目前炸彈："+bombCount);
 		time.setText("已經過時間： "+(timeCount));
 
@@ -207,7 +208,7 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 					
 					button[row][col].setBackground(Color.RED); //設定按鈕背景為紅色。
 					for(int i=0;i<mapRow;i++)for(int j=0;j<mapCol;j++) if(map[i][j]==1) button[i][j].setText("*"); //印出所有炸彈。
-					timeContinue=0; //時間停止計時。
+					timeCount = 0; //時間停止計時。
 					JOptionPane.showMessageDialog(null, "你踩到地雷了"); //顯示失敗訊息。
 					restart(); //重新開始。
 				}
@@ -337,6 +338,3 @@ class position{
 		return col;
 	}
 }
-
-
-
