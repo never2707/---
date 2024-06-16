@@ -252,19 +252,6 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 						}
 					}
 
-					//判斷是否勝利
-					boolean win = true;
-					for(int i=0; i<mapRow; i++)
-					for(int j=0; j<mapCol; j++)
-					if(map[i][j] == 0 && !buttonIsPress[i][j])
-					win = false;
-					if(win){
-						setTime();
-						timeCount = 0;
-						//Menu.userInformation.addTimeToRecord(this.mode, getTime());
-						JOptionPane.showMessageDialog(null, "You win");
-						restart();
-					}
 				}
 
 				//踩到數字
@@ -272,6 +259,19 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 					button[row][col].setText(Integer.toString(bombAround[row][col])); //印出數字。
 					button[row][col].setBackground(Color.GRAY); //設定按鈕背景顏色。
 					buttonIsPress[row][col]=true; //設定按鈕為按過。
+				}
+				//判斷是否勝利
+				boolean win = true;
+				for(int i=0; i<mapRow; i++)
+				for(int j=0; j<mapCol; j++)
+				if(map[i][j] == 0 && !buttonIsPress[i][j])
+				win = false;
+				if(win){
+					setTime();
+					timeCount = 0;
+					//Menu.userInformation.addTimeToRecord(this.mode, getTime());
+					JOptionPane.showMessageDialog(null, "You win");
+					restart();
 				}
 			}
 
@@ -337,4 +337,7 @@ class postion{
 		return col;
 	}
 }
+
+
+
 
