@@ -222,7 +222,7 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 						
 					Vector<position> vector=new Vector<position>(); //紀錄需要擴散的點。
 					vector.add(new position(row,col));
-					//判斷點是否符合擴散的需求，直到vector的資料都處理完。
+					//找出所有空格
 					for(int i=0;i<vector.size();i++){
 						for(int j=0;j<direct.length;j++){
 							int tempRow=direct[j][0]+vector.get(i).getRow(),tempCol=direct[j][1]+vector.get(i).getCol();
@@ -235,11 +235,11 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 										break;
 									}
 								}
-								if(!flag) vector.add(new position(tempRow,tempCol)); //此擴散點不存在則儲存起來。
+								if(!flag) vector.add(new position(tempRow,tempCol)); 
 							}
 						}
 					}
-					//開始擴散。
+					//將空格翻開
 					for(int i=0;i<vector.size();i++){
 						for(int j=0;j<direct.length;j++){
 							int tempRow=direct[j][0]+vector.get(i).getRow(),tempCol=direct[j][1]+vector.get(i).getCol();
@@ -247,8 +247,8 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 								//非0數字才印出來。
 								if(bombAround[tempRow][tempCol]!=0) 
 									button[tempRow][tempCol].setText(Integer.toString(bombAround[tempRow][tempCol]));
-								button[tempRow][tempCol].setBackground(Color.GRAY); 
-								buttonIsPress[tempRow][tempCol]=true; 
+									button[tempRow][tempCol].setBackground(Color.GRAY); 
+									buttonIsPress[tempRow][tempCol]=true; 
 							}
 						}
 					}
@@ -290,7 +290,9 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 					bombCount++;
 					bombRest.setText("目前炸彈:"+bombCount);
 				}
+				//放棋子
 				else{
+					if(buttonIsPress[row][col]) return;
 					button[row][col].setBackground(Color.GREEN);
 					buttonIsPress[row][col] = true;
 					bombCount--;
@@ -338,3 +340,4 @@ class position{
 		return col;
 	}
 }
+
