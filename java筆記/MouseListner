@@ -1,0 +1,9 @@
+1. About Mouse Clicks:
+    mouseClicked():  Press --> Release --> Run;
+    mousePressed(): Press --> Run
+    mouseReleased(): Released --> Run;
+
+2.About Mouse Move:
+    mouseEntered(): Mouse enter to the listenedObject --> Run;
+    mouseExited(): Mouse exit the listenedObject --> Run;
+    
