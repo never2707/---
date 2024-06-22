@@ -193,7 +193,9 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 
     //滑鼠事件  //加圖片
 	@Override
-	public void mouseClicked(MouseEvent e){
+	public void mouseClicked(MouseEvent e){}
+    @Override
+    public void mousePressed(java.awt.event.MouseEvent e) {
 		String command[]=((JButton)e.getSource()).getActionCommand().split(" ");
 		if(command[0].equals("r")) restart();//重新開始:r
 
@@ -317,10 +319,6 @@ public class MineSweeper extends JFrame implements java.awt.event.MouseListener{
 			}
 		}
 	}
-
-
-    @Override
-    public void mousePressed(java.awt.event.MouseEvent e) {}
     public void mouseReleased(java.awt.event.MouseEvent e) {}
     public void mouseEntered(java.awt.event.MouseEvent e) {}
     public void mouseExited(java.awt.event.MouseEvent e) {}
