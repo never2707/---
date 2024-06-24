@@ -1,0 +1,19 @@
+1. JFrame
+  setSize() //設置視窗大小 (含邊框)
+  setResizable() //設置調整大小的功能
+  setVisible() //設置可見
+  setDefaultCloseOperation() //設置關閉按鈕 (EXIT_ON_CLOSE :退出)
+  setLocationRelativeTo() //設置相對位置 (可用this設置在中央)
+  add() //加入組件 (Component)
+  remove() //移除組件
+  
+2. JPanel
+  add() //加入組件 (Component)
+  remove() //加入組件
+  setOpaque() //設置透明
+  setBackground() //設置背景顏色 (使用Color的常數)
+  setLayout() //設置布局
+
+3. JLabel
+
+4. JButton
