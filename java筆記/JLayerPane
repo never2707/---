@@ -1,0 +1,5 @@
+//可分層疊加多個Panel
+
+//(最底層) Default --> Pallete --> Modal --> PopUp --> Drag (最上層)
+
+// JLayerPane.add(JPanel, layer);
