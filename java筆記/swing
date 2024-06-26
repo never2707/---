@@ -17,3 +17,8 @@
 3. JLabel
 
 4. JButton
+
+
+//取消邊框的方法
+  setBorderPainted(false);
+  setBorder(null);
