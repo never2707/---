@@ -12,7 +12,7 @@ class Solution {
     }
 }
 
-//Map 
+//Map Beats 97%
 class Solution {
     public int[] twoSum(int[] nums, int target) {
         if(nums.length == 2){ 
