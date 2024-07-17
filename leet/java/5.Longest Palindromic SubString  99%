@@ -1,0 +1,38 @@
+class Solution{
+    public String longestPalindrome(String s){
+        if(s.length() < 2) return s;
+        int max = 1;
+        int index = 0;
+        char[] sc = s.toCharArray();
+        for(int i=1; i<sc.length; i++){
+            if(sc[i-1] == sc[i]){
+                int j = i-1;
+                int k = i;
+                while (j >= 0 && k < sc.length) {
+                    if(sc[j] != sc[k]) break;
+                    j--;
+                    k++;
+                }
+                if(k-j-1 > max){
+                    max = k - j - 1;
+                    index = j + 1;
+                }
+            }
+            if(i+1 == sc.length) continue;
+            if(sc[i-1] == sc[i+1]){
+                int j = i;
+                int k = i;
+                while (j >= 0 && k < sc.length) {
+                    if(sc[j] != sc[k]) break;
+                    j--;
+                    k++;
+                }
+                if(k-j-1 > max){
+                    max = k -j - 1;
+                    index = j+1;
+                }
+            }
+        }
+        return s.substring(index, index + max);
+    }
+}
