@@ -1,0 +1,24 @@
+class Solution {
+    public int romanToInt(String s) {
+
+        int result = 0;
+
+        for(int i=0, l=s.length(); i<l; i++){
+            switch (s.charAt(i)) {
+                case 'M': result += 1000; break;
+                case 'D': result += 500; break;
+                case 'C': result += 100; break;
+                case 'L': result += 50; break;
+                case 'X': result += 10; break;
+                case 'V': result += 5; break;
+                case 'I': result += 1; break;
+            }
+        }
+
+        if(s.contains("CM") || s.contains("CD")) result -= 200;
+        if(s.contains("XC") || s.contains("XL")) result -= 20;
+        if(s.contains("IX") || s.contains("IV")) result -= 2;
+
+        return result;
+    }
+}
