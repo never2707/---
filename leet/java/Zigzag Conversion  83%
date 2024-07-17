@@ -1,0 +1,40 @@
+
+class Solution{
+   public String convert(String s, int numRows){
+
+      if(s.length() <= numRows || numRows == 1){
+         return s;
+      }
+
+      StringBuilder[] column = new StringBuilder[numRows];
+
+      for(int i=0; i<numRows; i++){
+         column[i] = new StringBuilder();
+      }
+
+      int position = 0;
+      int direction = 0;
+
+      for(char c : s.toCharArray()){
+         column[position].append(c);
+
+         if(position == numRows-1){
+            direction = 1;
+         }
+
+         if(position == 0){
+            direction = 0;
+         }
+
+         position += (direction==0) ? 1 : -1;
+      }
+
+      StringBuilder result = new StringBuilder("");
+      for(StringBuilder S : column){
+         result.append(S);
+      }
+
+
+      return result.toString();
+   }
+}
