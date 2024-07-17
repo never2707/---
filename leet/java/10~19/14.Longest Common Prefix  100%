@@ -1,0 +1,23 @@
+class Solution {
+    public String longestCommonPrefix(String[] strs) {
+        char temp;
+        String shortest = strs[0];
+        boolean find = false;
+        for(String s : strs){
+            shortest = (shortest.length() < s.length()) ? shortest : s;
+        }
+
+        int i=0;
+        for(int l1 = shortest.length(); i<l1; i++){
+            temp = shortest.charAt(i);
+            for(String s : strs){
+                if(s.charAt(i) != temp){
+                    find = true;
+                    break;
+                }
+            }
+            if(find) break;
+        }
+        return shortest.substring(0, i);
+    }
+}
