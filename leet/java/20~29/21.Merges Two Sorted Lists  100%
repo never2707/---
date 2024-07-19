@@ -1,0 +1,39 @@
+class Solution {
+    public ListNode mergeTwoLists(ListNode list1, ListNode list2) {
+
+        if(list1 == null && list2 == null) return null;
+        else if(list1 == null) return list2;
+        else if(list2 == null) return list1;
+
+        ListNode result = new ListNode();
+        ListNode next1 = list1;
+        ListNode next2 = list2;
+        ListNode temp = result;
+
+        while (next1 != null && next2 != null) {
+            int i1 = next1.val;
+            int i2 = next2.val;
+            if(i1 <= i2){ 
+                temp.val = i1;
+                next1 = next1.next;
+            }
+            else{
+                temp.val = i2;
+                next2 = next2.next;
+            }
+            temp.next = new ListNode();
+            temp = temp.next;            
+        }
+
+        if(next1 == null){
+            temp.val = next2.val;
+            temp.next = next2.next;
+        }
+        if(next2 == null){
+            temp.val = next1.val;
+            temp.next = next1.next;
+        }
+
+        return result;
+    }
+}
