@@ -1,0 +1,17 @@
+class Solution {
+    public static ListNode removeNthFromEnd(ListNode head, int n) {
+
+        if(head == null || head.next == null && n == 1) return null;
+
+        ArrayList<ListNode> list = new ArrayList<>();
+        ListNode temp = head;
+        while(temp != null){
+            list.add(temp);
+            temp = temp.next;
+        }
+        if(n == 1) list.get(list.size()-n-1).next = null;
+        else if(n == list.size()) head = head.next;
+        else list.get(list.size()-n-1).next = list.get(list.size()-n+1);
+        return head;
+    }
+}
