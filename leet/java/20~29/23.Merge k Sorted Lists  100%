@@ -3,10 +3,10 @@ class Solution {
         if (lists == null || lists.length == 0) {
             return null;
         }
-        return mergeKListsHelper(lists, 0, lists.length - 1);
+        return recursion(lists, 0, lists.length - 1);
     }
     
-    private ListNode mergeKListsHelper(ListNode[] lists, int start, int end) {
+    private ListNode recursion(ListNode[] lists, int start, int end) {
         if (start == end) {
             return lists[start];
         }
@@ -14,8 +14,8 @@ class Solution {
             return merge(lists[start], lists[end]);
         }
         int mid = start + (end - start) / 2;
-        ListNode left = mergeKListsHelper(lists, start, mid);
-        ListNode right = mergeKListsHelper(lists, mid + 1, end);
+        ListNode left = recursion(lists, start, mid);
+        ListNode right = recursion(lists, mid + 1, end);
         return merge(left, right);
     }
     
@@ -39,3 +39,4 @@ class Solution {
         return dummy.next;
     }
 }
+
