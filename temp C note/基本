@@ -1,0 +1,10 @@
+//變數型態 type
+整數 short, int , long, long long 
+浮點數 float, double, long double
+字元 char
+
+//格式符號
+%d 整數
+%f 浮點數
+%c 字元
+%s 字串
