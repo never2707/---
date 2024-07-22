@@ -1,0 +1,21 @@
+class Solution {
+    public int divide(int dividend, int divisor) {
+        if(dividend == Integer.MIN_VALUE){
+            if(divisor == 1) return Integer.MIN_VALUE;
+            if(divisor == -1) return Integer.MAX_VALUE;
+        }
+        long divided = (long)dividend;
+        long divis = (long)divisor;
+        boolean isNag = (dividend < 0) == (divisor < 0);
+        divided = (divided < 0) ? -divided : divided;
+        divis = (divis < 0) ? -divis : divis;
+        int result = 0;
+        while (divided >= divis) {
+            int count = 0;
+            for( ; divided >= (divis << (count + 1)); count++){}
+            result += 1 << count;
+            divided -= divis << count;
+        }
+        return (isNag) ? result : -result;
+    }
+}   
