@@ -1,0 +1,7 @@
+#include <stdio.h>  // 加入 stdio.h 檔案
+
+int main(){
+  printf("Hello World\n");  //印出字串: printf()  // "\n" 換行
+  return 0;  //main() 執行完成
+}
+
