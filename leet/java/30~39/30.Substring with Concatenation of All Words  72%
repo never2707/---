@@ -1,0 +1,40 @@
+class Solution {
+    public List<Integer> findSubstring(String s, String[] words) {
+        List<Integer> list = new ArrayList<>();
+        HashMap<String, Integer> map = new HashMap<>();
+        for(String str : words){    
+            map.merge(str, 1, Integer::sum);
+        }
+        int w = words[0].length();
+        int l = s.length();
+        int n = words.length;
+        for(int i=0; i < w; i++){
+            Map<String, Integer> temp = new HashMap<>();
+            int t = 0;
+            int index = i;
+            int index1 = i;;
+            while (index + w <= l) {
+                String str = s.substring(index, index + w);
+                index += w;
+                if(!map.containsKey(str)){
+                    temp.clear();
+                    index1 = index;
+                    t = 0;
+                    continue;
+                }
+                temp.merge(str, 1, Integer::sum);
+                t += 1;
+                while (temp.get(str) > map.get(str)) {
+                    String remove = s.substring(index1, index1 + w);
+                    index1 += w;
+                    temp.merge(remove, -1, Integer::sum);
+                    t -= 1;
+                }
+                if(t == n){
+                    list.add(index1);
+                }
+            }
+        }
+        return list;
+    }
+}
