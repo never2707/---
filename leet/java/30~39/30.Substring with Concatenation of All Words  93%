@@ -8,7 +8,7 @@ class Solution {
         int w = words[0].length();
         int l = s.length();
         int n = words.length;
-        for(int i=0; i < w; i++){
+        for(int i=0; i < w; ++i){
             Map<String, Integer> temp = new HashMap<>();
             int t = 0;
             int index = i;
